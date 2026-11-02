@@ -40,7 +40,7 @@ send "forceload add 0 0 48 48"
 sleep 3
 for f in $FACTIONS; do for r in $ROLES; do send "summon factionlands:${f}_${r} 8 -60 8"; done; done
 send "say ==PLANTILLAS=="
-send "forceload add 368 368 432 432"; sleep 6
+send "forceload add 336 336 464 464"; sleep 10
 for f in $FACTIONS; do
   send "place template factionlands:${f}/village 400 -60 400"
   for p in src/main/resources/data/factionlands/structure/$f/buildings/*.nbt; do
@@ -50,7 +50,9 @@ done
 send "say ==ALDEAS=="
 i=0; for f in $FACTIONS; do i=$((i+1)); x=$((i*300))
   send "forceload add $((x-90)) -390 $((x+90)) -210"; sleep 8
-  send "place structure factionlands:${f}_village $x -60 -300"; sleep 4
+  send "place structure factionlands:${f}_village $x -60 -300"; sleep 5
+  send "execute positioned $x -60 -300 if entity @e[type=factionlands:${f}_leader,distance=..130]"
+  send "execute positioned $x -60 -300 as @e[type=factionlands:${f}_warrior,distance=..130,limit=1] run data get entity @s equipment"
 done
 send "say ==COMBATE=="
 send "summon factionlands:troll_warrior 24 -60 24"

@@ -76,6 +76,8 @@ def structure_nbt(size, blocks, entities):
              for (x, y, z), st in sorted(blocks.items(), key=lambda kv: (kv[0][1], kv[0][2], kv[0][0]))]
     elist = []
     for (x, y, z, eid, yaw) in entities:
+        if ":" not in eid:
+            eid = "factionlands:" + eid   # el id debe llevar espacio de nombres o se resuelve como minecraft:<id>
         elist.append(Comp({
             "pos": List(DOUBLE, [Dbl(x + 0.5), Dbl(float(y)), Dbl(z + 0.5)]),
             "blockPos": List(INT, [Int(x), Int(y), Int(z)]),
