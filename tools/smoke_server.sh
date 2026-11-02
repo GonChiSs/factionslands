@@ -12,6 +12,7 @@ echo "eula=true" > run/eula.txt
 cat > run/server.properties <<'EOP'
 online-mode=false
 level-type=minecraft\:flat
+generator-settings={"biome":"minecraft:plains","layers":[{"block":"minecraft:bedrock","height":1},{"block":"minecraft:dirt","height":2},{"block":"minecraft:grass_block","height":1}],"structure_overrides":[]}
 spawn-protection=0
 view-distance=6
 simulation-distance=6
@@ -67,7 +68,10 @@ echo "Plantillas:      $(grep -c 'Loaded template' "$LOG") (esperado 109)"
 echo "Aldeas:          $(grep -c 'Generated structure' "$LOG") (esperado 5)"
 echo "---- líneas sospechosas:"
 grep -E "ERROR|Exception|Unable|Failed|Unknown|Invalid|Incorrect|Expected|Couldn't|Could not|crash|Missing|No such|\bat com\.factionlands" "$LOG" | grep -v "Stopping" | cut -c1-260 | sort | uniq -c | sort -rn | head -50
+echo "---- respuestas a los comandos (agrupadas):"
+grep -E "System chat|\[Server\]" "$LOG" | sed -E 's/^\[[0-9:]+\] \[[^]]*\] \(Minecraft\) //' | sort | uniq -c | sort -rn | cut -c1-200 | head -40
 echo "---- respuestas de combate:"
 sed -n '/==COMBATE==/,/==FIN==/p' "$LOG" | cut -c1-200 | tail -n 12
+echo "::group::server.log desde el arranque"; sed -n '/Done (/,$p' "$LOG" | cut -c1-220 | head -500; echo "::endgroup::"
 S=$(grep -c 'Summoned new' "$LOG"); T=$(grep -c 'Loaded template' "$LOG"); A=$(grep -c 'Generated structure' "$LOG")
 [ "$S" -ge 44 ] && [ "$T" -ge 109 ] && [ "$A" -ge 5 ] && ! grep -qE "Exception|crash report|Encountered an unexpected exception" "$LOG"

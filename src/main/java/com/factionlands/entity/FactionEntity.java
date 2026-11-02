@@ -56,6 +56,7 @@ public class FactionEntity extends PathfinderMob implements RangedAttackMob {
 		super(type, level);
 		this.faction = faction;
 		this.role = role;
+		initGoals(); // las metas dependen de (facción, rol): no pueden registrarse en registerGoals()
 	}
 
 	public Faction getFaction() {
@@ -79,8 +80,11 @@ public class FactionEntity extends PathfinderMob implements RangedAttackMob {
 
 	// ───────────────────────────── IA ─────────────────────────────
 
+	/** El constructor de Mob llama a registerGoals() antes de que existan nuestros campos, así que no hace nada. */
 	@Override
-	protected void registerGoals() {
+	protected void registerGoals() {}
+
+	private void initGoals() {
 		this.goalSelector.addGoal(0, new FloatGoal(this));
 		if (role.ranged && role.mainHand(faction) != Items.AIR) {
 			this.goalSelector.addGoal(2, new RangedAttackGoal(this, 1.0, 25, 16.0F));
