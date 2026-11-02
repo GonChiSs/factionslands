@@ -33,6 +33,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.arrow.Arrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -131,19 +132,15 @@ public class FactionEntity extends PathfinderMob implements RangedAttackMob {
 		if (!(level() instanceof ServerLevel server)) {
 			return;
 		}
-		Arrow arrow = EntityType.ARROW.create(server, EntitySpawnReason.TRIGGERED);
-		if (arrow == null) {
-			return;
-		}
-		arrow.setOwner(this);
-		arrow.setPos(getX(), getEyeY() - 0.1, getZ());
+		ItemStack weapon = getMainHandItem();
+		// 26.x: el constructor coloca la flecha en los ojos del tirador; no existe EntityType.ARROW
+		Arrow arrow = new Arrow(server, this, new ItemStack(Items.ARROW), weapon);
 		double dx = target.getX() - getX();
 		double dy = target.getY(0.3333333333333333) - arrow.getY();
 		double dz = target.getZ() - getZ();
 		double dist = Math.sqrt(dx * dx + dz * dz);
-		arrow.shoot(dx, dy + dist * 0.2, dz, 1.6F, 14 - server.getDifficulty().getId() * 4);
+		Projectile.spawnProjectileUsingShoot(arrow, server, weapon, dx, dy + dist * 0.2, dz, 1.6F, rangedAttackUncertainty(server));
 		playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (getRandom().nextFloat() * 0.4F + 0.8F));
-		server.addFreshEntity(arrow);
 	}
 
 	@Override
