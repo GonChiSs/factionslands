@@ -1,0 +1,14 @@
+-proc:none
+-Xmaxerrs
+2000
+-d
+/tmp/claude-0/-home-claude/8b528bfe-8e4f-5569-a11e-ee7017c87608/scratchpad/jout
+src/main/java/com/factionlands/ModItems.java
+src/main/java/com/factionlands/Role.java
+src/main/java/com/factionlands/FactionLands.java
+src/main/java/com/factionlands/Faction.java
+src/main/java/com/factionlands/ModEntities.java
+src/main/java/com/factionlands/Config.java
+src/main/java/com/factionlands/entity/FactionEntity.java
+src/client/java/com/factionlands/client/FactionRenderer.java
+src/client/java/com/factionlands/client/FactionLandsClient.java
