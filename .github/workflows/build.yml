@@ -19,6 +19,18 @@ jobs:
         run: chmod +x ./gradlew
       - name: build
         run: ./gradlew build
+      - name: prueba de humo en servidor (mobs, plantillas, aldeas)
+        id: smoke
+        continue-on-error: true
+        timeout-minutes: 20
+        run: bash tools/smoke_server.sh
+      - name: guardar log del servidor
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: server-log
+          path: run/server.log
+          if-no-files-found: ignore
       - name: inspect Minecraft API (diagnóstico)
         if: always()
         run: bash tools/inspect_api.sh
