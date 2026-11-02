@@ -1,6 +1,9 @@
 name: build
 on: [pull_request, push, workflow_dispatch]
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-24.04
@@ -24,3 +27,26 @@ jobs:
         with:
           name: factionlands-jar
           path: build/libs/
+      # Publica el .jar listo para instalar: en una Release (descarga directa) y en la rama "jar".
+      - name: publish jar (Release + rama jar)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          JAR=$(ls build/libs/*.jar | grep -v -- '-sources' | grep -v -- '-dev' | head -1)
+          NAME=$(basename "$JAR")
+          echo "jar: $JAR"
+          gh release create "build-${GITHUB_RUN_NUMBER}" "$JAR" \
+            --target "$GITHUB_SHA" \
+            --title "Factionlands (build ${GITHUB_RUN_NUMBER}, ${GITHUB_SHA::7})" \
+            --notes "Mod para Minecraft Fabric 26.3. Copia \`${NAME}\` a la carpeta mods junto con Fabric API 0.165.0+26.3." \
+            --latest
+          mkdir -p /tmp/pub && cp "$JAR" "/tmp/pub/$NAME"
+          cd /tmp/pub
+          git init -q -b jar
+          git config user.name "github-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add .
+          git commit -qm "jar de ${GITHUB_SHA::7}"
+          git push -qf "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" jar
