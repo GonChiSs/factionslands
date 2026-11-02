@@ -51,6 +51,7 @@ public class FactionEntity extends PathfinderMob implements RangedAttackMob {
 	private final Faction faction;
 	private final Role role;
 	private BlockPos home;
+	private boolean setupDone;
 
 	public FactionEntity(EntityType<? extends FactionEntity> type, Level level, Faction faction, Role role) {
 		super(type, level);
@@ -137,6 +138,9 @@ public class FactionEntity extends PathfinderMob implements RangedAttackMob {
 			return;
 		}
 		ItemStack weapon = getMainHandItem();
+		if (weapon.isEmpty()) {
+			return; // sin arma no hay disparo (Arrow lanza IllegalArgumentException con un arma vacía)
+		}
 		// 26.x: el constructor coloca la flecha en los ojos del tirador; no existe EntityType.ARROW
 		Arrow arrow = new Arrow(server, this, new ItemStack(Items.ARROW), weapon);
 		double dx = target.getX() - getX();
@@ -149,6 +153,9 @@ public class FactionEntity extends PathfinderMob implements RangedAttackMob {
 
 	@Override
 	public void aiStep() {
+		if (!setupDone && level() instanceof ServerLevel) {
+			ensureSetup();
+		}
 		super.aiStep();
 		if (role.healer && tickCount % 80 == 0 && level() instanceof ServerLevel server) {
 			for (FactionEntity ally : server.getEntitiesOfClass(FactionEntity.class, getBoundingBox().inflate(8.0),
@@ -175,12 +182,30 @@ public class FactionEntity extends PathfinderMob implements RangedAttackMob {
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason reason,
 										SpawnGroupData groupData) {
 		SpawnGroupData data = super.finalizeSpawn(level, difficulty, reason, groupData);
-		setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(role.mainHand(faction)));
-		setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(role.offHand()));
+		equipGear();
 		setPersistenceRequired();
 		home = blockPosition();
 		setHomeTo(home, Config.get().homeRadius);
+		setupDone = true;
 		return data;
+	}
+
+	private void equipGear() {
+		setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(role.mainHand(faction)));
+		setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(role.offHand()));
+	}
+
+	/** Los habitantes que salen de una plantilla de estructura (aldeas) no pasan por finalizeSpawn: se equipan en su primer tick. */
+	private void ensureSetup() {
+		setupDone = true;
+		if (getMainHandItem().isEmpty() && role.mainHand(faction) != Items.AIR) {
+			equipGear();
+		}
+		setPersistenceRequired();
+		if (home == null) {
+			home = blockPosition();
+			setHomeTo(home, Config.get().homeRadius);
+		}
 	}
 
 	@Override
