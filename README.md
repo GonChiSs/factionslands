@@ -21,7 +21,13 @@ el `.jar` como artefacto descargable en la pestaña *Actions*.
 
 ## Probarlo en el juego
 
-- Los **huevos de aparición** de los 40 habitantes están en la pestaña *Huevos de aparición*.
+- Pestaña creativa **Factionlands**: una fila por facción (trols, caballeros, elfos, enanos, humanos) con el
+  **estandarte de civilización** y los 8 huevos de aparición (líder, leñador, albañil, herrero, guerrero, arquero,
+  explorador, místico). Los huevos ya no están en la pestaña vanilla de huevos.
+- **Estandarte de civilización**: clic derecho en el suelo y aparece la aldea completa de esa facción (con sus
+  habitantes), orientada hacia donde miras. Despeja árboles y colinas en unos 75×110 bloques y rellena los huecos.
+  Necesita que el terreno esté cargado (colócate cerca del punto). En supervivencia se gasta; en creativo no.
+- Lo mismo por comando (nivel de operador): `/factionlands civilization <troll|knight|elf|dwarf|human>` en tu posición.
 - Aldeas: `/place structure factionlands:troll_village` (también `knight_village`, `elf_village`, `dwarf_village`, `human_village`).
 - Aparecen solas en biomas afines: trols en pantano y bosque oscuro, caballeros en llanura, elfos en abedulares,
   enanos en montaña y humanos en bosque, llanura, taiga y sabana.
