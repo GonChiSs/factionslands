@@ -8,6 +8,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -49,7 +50,7 @@ public class WorkGoal extends Goal {
 	}
 
 	private boolean isDay(ServerLevel level) {
-		return level.getDayTime() % 24000L < 12000L;
+		return level.isBrightOutside();
 	}
 
 	@Override
@@ -121,7 +122,7 @@ public class WorkGoal extends Goal {
 		mob.getNavigation().stop();
 		worked++;
 		if (worked % 18 == 0) {
-			mob.swing(InteractionHand.MAIN_HAND);
+			mob.swing(InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT, true);
 			if (mob.level() instanceof ServerLevel level) {
 				BlockState state = level.getBlockState(station);
 				SoundEvent hit = state.getSoundType().getHitSound();
