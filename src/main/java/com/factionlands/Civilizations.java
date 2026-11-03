@@ -48,7 +48,7 @@ public final class Civilizations {
 	 * @param ground bloque de suelo sobre el que se centra la aldea (su capa pasa a ser la calle)
 	 */
 	public static Result found(ServerLevel level, BlockPos ground, Rotation rotation, Faction faction) {
-		Optional<StructureTemplate> found = level.getServer().getStructureManager()
+		Optional<StructureTemplate> found = level.getStructureManager()
 				.get(FactionLands.id(faction.id + "/village"));
 		if (found.isEmpty()) {
 			return new Result(false, Component.translatable("message.factionlands.civilization_missing"));
