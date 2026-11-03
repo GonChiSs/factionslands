@@ -87,5 +87,17 @@
   "dialog.factionlands.warrior": "Stay behind me.",
   "dialog.factionlands.archer": "I have my eye on the treeline.",
   "dialog.factionlands.scout": "The road ahead is quiet... for now.",
-  "dialog.factionlands.mystic": "Let me tend to those wounds."
+  "dialog.factionlands.mystic": "Let me tend to those wounds.",
+  "itemGroup.factionlands.main": "Factionlands",
+  "item.factionlands.troll_civilization": "Troll Civilization",
+  "item.factionlands.knight_civilization": "Knight Civilization",
+  "item.factionlands.elf_civilization": "Elf Civilization",
+  "item.factionlands.dwarf_civilization": "Dwarf Civilization",
+  "item.factionlands.human_civilization": "Human Civilization",
+  "item.factionlands.civilization.tooltip": "Right-click the ground to found a full village.",
+  "item.factionlands.civilization.tooltip2": "Levels about 75x110 blocks and faces the way you look.",
+  "message.factionlands.civilization_founded": "%s founded!",
+  "message.factionlands.civilization_unloaded": "Part of the area isn't loaded yet. Stand closer to the spot and try again.",
+  "message.factionlands.civilization_height": "Not enough vertical space here.",
+  "message.factionlands.civilization_missing": "Village template not found."
 }

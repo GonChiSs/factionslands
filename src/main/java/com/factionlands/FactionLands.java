@@ -20,5 +20,6 @@ public class FactionLands implements ModInitializer {
 		Config.load();
 		ModEntities.initialize();
 		ModItems.initialize();
+		ModCommands.initialize();
 	}
 }

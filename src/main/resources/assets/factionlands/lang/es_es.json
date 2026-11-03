@@ -87,5 +87,17 @@
   "dialog.factionlands.warrior": "Quédate detrás de mí.",
   "dialog.factionlands.archer": "Vigilo la linde del bosque.",
   "dialog.factionlands.scout": "El camino está tranquilo... por ahora.",
-  "dialog.factionlands.mystic": "Déjame curar esas heridas."
+  "dialog.factionlands.mystic": "Déjame curar esas heridas.",
+  "itemGroup.factionlands.main": "Factionlands",
+  "item.factionlands.troll_civilization": "Civilización de trols",
+  "item.factionlands.knight_civilization": "Civilización de caballeros",
+  "item.factionlands.elf_civilization": "Civilización de elfos",
+  "item.factionlands.dwarf_civilization": "Civilización de enanos",
+  "item.factionlands.human_civilization": "Civilización de humanos",
+  "item.factionlands.civilization.tooltip": "Clic derecho en el suelo para fundar una aldea completa.",
+  "item.factionlands.civilization.tooltip2": "Aplana unos 75x110 bloques y mira hacia donde miras.",
+  "message.factionlands.civilization_founded": "¡%s fundada!",
+  "message.factionlands.civilization_unloaded": "Parte de la zona aún no está cargada. Acércate al lugar e inténtalo de nuevo.",
+  "message.factionlands.civilization_height": "No hay altura suficiente aquí.",
+  "message.factionlands.civilization_missing": "No se encontró la plantilla de la aldea."
 }

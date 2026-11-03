@@ -54,6 +54,12 @@ i=0; for f in $FACTIONS; do i=$((i+1)); x=$((i*300))
   send "execute positioned $x -60 -300 if entity @e[type=factionlands:${f}_leader,distance=..130]"
   send "execute positioned $x -60 -300 as @e[type=factionlands:${f}_warrior,distance=..130,limit=1] run data get entity @s equipment"
 done
+send "say ==CIVILIZACIONES=="
+i=0; for f in $FACTIONS; do i=$((i+1)); x=$((i*300)); rot=$(( (i-1) % 4 * 90 ))
+  send "forceload add $((x-70)) 630 $((x+70)) 770"; sleep 8
+  send "execute positioned $x -60 700 rotated $rot 0 run factionlands civilization $f"; sleep 6
+  send "execute positioned $x -60 700 if entity @e[type=factionlands:${f}_leader,distance=..130]"
+done
 send "say ==COMBATE=="
 send "summon factionlands:troll_warrior 24 -60 24"
 send "summon factionlands:human_archer 30 -60 24"
@@ -72,6 +78,7 @@ echo "================ RESUMEN ================"
 echo "Summoned:        $(grep -c 'Summoned new' "$LOG") (esperado 44)"
 echo "Plantillas:      $(grep -c 'Loaded template' "$LOG") (esperado 109)"
 echo "Aldeas:          $(grep -c 'Generated structure' "$LOG") (esperado 5)"
+echo "Civilizaciones:  $(grep -c ' founded' "$LOG") (esperado 5)"
 echo "---- líneas sospechosas:"
 grep -E "ERROR|Exception|Unable|Failed|Unknown|Invalid|Incorrect|Expected|Couldn't|Could not|crash|Missing|No such|\bat com\.factionlands" "$LOG" | grep -v "Stopping" | cut -c1-260 | sort | uniq -c | sort -rn | head -50
 echo "---- respuestas a los comandos (agrupadas):"
@@ -80,4 +87,5 @@ echo "---- respuestas de combate:"
 sed -n '/==COMBATE==/,/==FIN==/p' "$LOG" | cut -c1-200 | tail -n 12
 echo "::group::server.log desde el arranque"; sed -n '/Done (/,$p' "$LOG" | cut -c1-220 | head -500; echo "::endgroup::"
 S=$(grep -c 'Summoned new' "$LOG"); T=$(grep -c 'Loaded template' "$LOG"); A=$(grep -c 'Generated structure' "$LOG")
-[ "$S" -ge 44 ] && [ "$T" -ge 109 ] && [ "$A" -ge 5 ] && ! grep -qE "Exception|crash report|Encountered an unexpected exception" "$LOG"
+C=$(grep -c ' founded' "$LOG")
+[ "$S" -ge 44 ] && [ "$T" -ge 109 ] && [ "$A" -ge 5 ] && [ "$C" -ge 5 ] && ! grep -qE "Exception|crash report|Encountered an unexpected exception" "$LOG"

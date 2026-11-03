@@ -24,6 +24,9 @@ ES_D = dict(leader="Nuestro pueblo perdurará.", lumberjack="La madera no se tal
             scout="El camino está tranquilo... por ahora.", mystic="Déjame curar esas heridas.")
 
 
+ES_P = dict(troll="trols", knight="caballeros", elf="elfos", dwarf="enanos", human="humanos")
+
+
 def lang(en):
     F, R, D = (EN_F, EN_R, EN_D) if en else (ES_F, ES_R, ES_D)
     out = {"dialog.factionlands.chat": "<%s> %s"}
@@ -34,6 +37,24 @@ def lang(en):
             out[f"item.factionlands.{f}_{r}_spawn_egg"] = name + (" Spawn Egg" if en else " (huevo de aparición)")
     for r in ROLES:
         out[f"dialog.factionlands.{r}"] = D[r]
+    # pestaña creativa, estandartes de civilización y mensajes
+    out["itemGroup.factionlands.main"] = "Factionlands"
+    for f in FACTIONS:
+        out[f"item.factionlands.{f}_civilization"] = f"{EN_F[f]} Civilization" if en else f"Civilización de {ES_P[f]}"
+    if en:
+        out["item.factionlands.civilization.tooltip"] = "Right-click the ground to found a full village."
+        out["item.factionlands.civilization.tooltip2"] = "Levels about 75x110 blocks and faces the way you look."
+        out["message.factionlands.civilization_founded"] = "%s founded!"
+        out["message.factionlands.civilization_unloaded"] = "Part of the area isn't loaded yet. Stand closer to the spot and try again."
+        out["message.factionlands.civilization_height"] = "Not enough vertical space here."
+        out["message.factionlands.civilization_missing"] = "Village template not found."
+    else:
+        out["item.factionlands.civilization.tooltip"] = "Clic derecho en el suelo para fundar una aldea completa."
+        out["item.factionlands.civilization.tooltip2"] = "Aplana unos 75x110 bloques y mira hacia donde miras."
+        out["message.factionlands.civilization_founded"] = "¡%s fundada!"
+        out["message.factionlands.civilization_unloaded"] = "Parte de la zona aún no está cargada. Acércate al lugar e inténtalo de nuevo."
+        out["message.factionlands.civilization_height"] = "No hay altura suficiente aquí."
+        out["message.factionlands.civilization_missing"] = "No se encontró la plantilla de la aldea."
     return out
 
 
@@ -51,4 +72,11 @@ for f in FACTIONS:
             json.dump({"model": {"type": "minecraft:model", "model": "minecraft:item/template_spawn_egg",
                                  "tints": [{"type": "minecraft:constant", "value": c0},
                                            {"type": "minecraft:constant", "value": c1}]}}, fh, indent=2)
+mdir = os.path.join(ASSETS, "models", "item")
+os.makedirs(mdir, exist_ok=True)
+for f in FACTIONS:   # estandartes de civilización: definición de ítem + modelo plano con su icono
+    with open(os.path.join(idir, f"{f}_civilization.json"), "w") as fh:
+        json.dump({"model": {"type": "minecraft:model", "model": f"factionlands:item/{f}_civilization"}}, fh, indent=2)
+    with open(os.path.join(mdir, f"{f}_civilization.json"), "w") as fh:
+        json.dump({"parent": "minecraft:item/generated", "textures": {"layer0": f"factionlands:item/{f}_civilization"}}, fh, indent=2)
 print("lang + items escritos")
