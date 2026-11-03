@@ -74,3 +74,10 @@ jp net.minecraft.world.item.Item\$Properties 'rarity|stacksTo|public '
 jp net.minecraft.world.item.UseAnim 'enum'
 echo; echo "##### clases en net.minecraft.server.permissions"
 for j in ${MC//:/ }; do unzip -l "$j" 2>/dev/null | grep -E 'net/minecraft/server/permissions/[A-Za-z$]+\.class' | awk '{print $4}'; done | sort -u
+
+# ───── ¿quién devuelve el StructureTemplateManager? ─────
+jp net.minecraft.server.MinecraftServer 'StructureTemplateManager'
+jp net.minecraft.server.level.ServerLevel 'StructureTemplateManager|structureManager|StructureManager'
+jp net.minecraft.server.level.ServerChunkCache 'StructureTemplateManager'
+jp net.minecraft.commands.CommandSourceStack 'getServer'
+jp net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate 'getBoundingBox|placeInWorld'
