@@ -92,6 +92,9 @@ public class FactionEntity extends PathfinderMob implements RangedAttackMob {
 		} else {
 			this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.1, true));
 		}
+		if (com.factionlands.ai.WorkGoal.hasJob(role)) {
+			this.goalSelector.addGoal(4, new com.factionlands.ai.WorkGoal(this, 0.8));
+		}
 		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 0.8));
 		this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 0.7));
 		this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));

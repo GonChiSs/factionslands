@@ -22,7 +22,7 @@ EOP
 
 rm -f run/in && mkfifo run/in
 exec 3<>run/in                      # mantiene la tubería abierta para escribir comandos
-./gradlew runServer --no-daemon < run/in > "$LOG" 2>&1 &
+JAVA_TOOL_OPTIONS="-Dfactionlands.debug=true" ./gradlew runServer --no-daemon < run/in > "$LOG" 2>&1 &
 GPID=$!
 
 for i in $(seq 1 120); do            # espera a "Done (x s)!" (máx. 10 min)
@@ -78,6 +78,7 @@ echo "================ RESUMEN ================"
 echo "Summoned:        $(grep -c 'Summoned new' "$LOG") (esperado 44)"
 echo "Plantillas:      $(grep -c 'Loaded template' "$LOG") (esperado 109)"
 echo "Aldeas:          $(grep -c 'Generated structure' "$LOG") (esperado 5)"
+echo "Trabajos:        $(grep -c 'WORK start' "$LOG") inicios, $(grep -c 'WORK done' "$LOG") turnos completos (esperado >= 1)"
 echo "Civilizaciones:  $(grep -c ' founded' "$LOG") (esperado 5)"
 echo "---- líneas sospechosas:"
 grep -E "ERROR|Exception|Unable|Failed|Unknown|Invalid|Incorrect|Expected|Couldn't|Could not|crash|Missing|No such|\bat com\.factionlands" "$LOG" | grep -v "Stopping" | cut -c1-260 | sort | uniq -c | sort -rn | head -50
@@ -87,5 +88,5 @@ echo "---- respuestas de combate:"
 sed -n '/==COMBATE==/,/==FIN==/p' "$LOG" | cut -c1-200 | tail -n 12
 echo "::group::server.log desde el arranque"; sed -n '/Done (/,$p' "$LOG" | cut -c1-220 | head -500; echo "::endgroup::"
 S=$(grep -c 'Summoned new' "$LOG"); T=$(grep -c 'Loaded template' "$LOG"); A=$(grep -c 'Generated structure' "$LOG")
-C=$(grep -c ' founded' "$LOG")
-[ "$S" -ge 44 ] && [ "$T" -ge 109 ] && [ "$A" -ge 5 ] && [ "$C" -ge 5 ] && ! grep -qE "Exception|crash report|Encountered an unexpected exception" "$LOG"
+C=$(grep -c ' founded' "$LOG"); W=$(grep -c 'WORK done' "$LOG")
+[ "$S" -ge 44 ] && [ "$T" -ge 109 ] && [ "$A" -ge 5 ] && [ "$C" -ge 5 ] && [ "$W" -ge 1 ] && ! grep -qE "Exception|crash report|Encountered an unexpected exception" "$LOG"
