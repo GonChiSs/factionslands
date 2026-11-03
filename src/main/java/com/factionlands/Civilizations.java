@@ -69,7 +69,7 @@ public final class Civilizations {
 		int z0 = origin.getZ() + minZ, z1 = origin.getZ() + maxZ;
 		int y0 = origin.getY(), y1 = origin.getY() + sy - 1 + CLEAR_EXTRA;
 
-		if (y0 - SKIRT_DEPTH < level.getMinY() || y1 > level.getMaxY()) {
+		if (y0 < level.getMinY() || y1 > level.getMaxY()) {
 			return new Result(false, Component.translatable("message.factionlands.civilization_height"));
 		}
 		if (!level.hasChunksAt(new BlockPos(x0, y0, z0), new BlockPos(x1, y1, z1))) {
@@ -96,7 +96,7 @@ public final class Civilizations {
 		BlockState dirt = Blocks.DIRT.defaultBlockState();
 		for (int x = x0; x <= x1; x++) {
 			for (int z = z0; z <= z1; z++) {
-				for (int y = origin.getY() - 1; y >= origin.getY() - SKIRT_DEPTH; y--) {
+				for (int y = origin.getY() - 1; y >= Math.max(origin.getY() - SKIRT_DEPTH, level.getMinY()); y--) {
 					pos.set(x, y, z);
 					BlockState state = level.getBlockState(pos);
 					if (state.isAir() || state.canBeReplaced() || !state.getFluidState().isEmpty()) {
