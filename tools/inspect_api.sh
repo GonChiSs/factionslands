@@ -81,3 +81,11 @@ jp net.minecraft.server.level.ServerLevel 'StructureTemplateManager|structureMan
 jp net.minecraft.server.level.ServerChunkCache 'StructureTemplateManager'
 jp net.minecraft.commands.CommandSourceStack 'getServer'
 jp net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate 'getBoundingBox|placeInWorld'
+
+# ───── tiempo y animación de golpe ─────
+jp net.minecraft.world.level.Level 'Time|isBrightOutside|isDay|isNight'
+jp net.minecraft.server.level.ServerLevel 'Time|isBrightOutside|isDay|isNight'
+jp net.minecraft.world.entity.LivingEntity 'swing'
+jp net.minecraft.world.entity.LivingEntity 'swinging|SwingAnimation'
+jp net.minecraft.world.item.component.SwingAnimation 'public'
+jp net.minecraft.world.item.SwingAnimationType 'public static'
